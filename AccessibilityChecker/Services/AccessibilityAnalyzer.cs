@@ -14,7 +14,16 @@ namespace AccessibilityChecker.Services
 
     public class AccessibilityAnalyzer
     {
-        private readonly HttpClient _httpClient = new HttpClient();
+        private readonly HttpClient _httpClient;
+
+        public AccessibilityAnalyzer()
+        {
+            _httpClient = new HttpClient();
+            // Some websites block requests without a user agent.
+            _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
+                "Mozilla/5.0 (compatible; AccessibilityChecker/1.0)"
+            );
+        }
 
         public async Task<AccessibilityResult> AnalyzeAsync(string url)
         {

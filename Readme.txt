@@ -9,7 +9,8 @@ Questo progetto contiene un semplice servizio Web in .NET 8 che consente di anal
    ```bash
    dotnet run
    ```
-3. Utilizzare gli endpoint HTTP:
+3. Aprire `http://localhost:5000` nel browser per utilizzare la semplice interfaccia web basata su Bootstrap 5.
+4. In alternativa è possibile utilizzare gli endpoint HTTP:
    - `POST /api/accessibility/analyze` con parametro `url` nel body per ottenere un report JSON.
    - `POST /api/accessibility/declaration` con parametro `url` nel body per ricevere un PDF chiamato "DichiarazioneAccessibilita.pdf".
 
