@@ -1,4 +1,5 @@
 using AccessibilityChecker.Services;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/api/accessibility/analyze", async (string url, AccessibilityAnalyzer analyzer) =>
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.MapPost("/api/accessibility/analyze", async ([FromBody] string url, AccessibilityAnalyzer analyzer) =>
 {
     if (string.IsNullOrWhiteSpace(url))
     {
@@ -35,7 +39,7 @@ app.MapPost("/api/accessibility/analyze", async (string url, AccessibilityAnalyz
     }
 });
 
-app.MapPost("/api/accessibility/declaration", async (string url, AccessibilityAnalyzer analyzer, AccessibilityDeclarationGenerator generator) =>
+app.MapPost("/api/accessibility/declaration", async ([FromBody] string url, AccessibilityAnalyzer analyzer, AccessibilityDeclarationGenerator generator) =>
 {
     if (string.IsNullOrWhiteSpace(url))
     {

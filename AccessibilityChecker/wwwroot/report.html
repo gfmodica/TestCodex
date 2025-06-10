@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <title>Report Accessibilità</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-5">
+  <h1 class="mb-4">Report Accessibilità</h1>
+  <div id="content">Caricamento...</div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const url = params.get('url');
+    if (!url) {
+      document.getElementById('content').textContent = 'URL mancante';
+    } else {
+      fetch('/api/accessibility/analyze', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(url)
+      })
+      .then(r => r.ok ? r.json() : r.text().then(t => Promise.reject(t)))
+      .then(data => {
+        const html = `
+          <p><strong>URL analizzata:</strong> ${url}</p>
+          <ul class="list-group mb-3">
+            <li class="list-group-item">Titolo presente: ${data.hasTitle}</li>
+            <li class="list-group-item">Attributo lang presente: ${data.hasLang}</li>
+            <li class="list-group-item">Immagini senza alt: ${data.imagesWithoutAlt}</li>
+            <li class="list-group-item">Campi input senza label: ${data.inputsWithoutLabel}</li>
+          </ul>
+          <a href="declaration.html?url=${encodeURIComponent(url)}" class="btn btn-success">Mostra dichiarazione di accessibilità</a>
+        `;
+        document.getElementById('content').innerHTML = html;
+      })
+      .catch(err => {
+        document.getElementById('content').textContent = 'Errore: ' + err;
+      });
+    }
+  </script>
+</body>
+</html>
